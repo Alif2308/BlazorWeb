@@ -1,0 +1,90 @@
+﻿@page "/"
+@inject NavigationManager Navigation
+
+<section class="vh-100">
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-9 col-lg-6 col-xl-5">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid" alt="Sample image">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                <!-- Use EditForm to manage the form and handle the submit -->
+                <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+                    <DataAnnotationsValidator />
+                    <div class="d-flex flex-row align-items-center justify-content-center">
+                        <h1 class="fw-bold mb-5">Sign In</h1>
+                    </div>
+
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <InputText type="email" class="form-control form-control-lg"
+                                   placeholder="Enter a valid email address" @bind-Value="loginModel.Email" />
+                        <label class="form-label">Email address</label>
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-3">
+                        <InputText type="password" class="form-control form-control-lg"
+                                   placeholder="Enter password" @bind-Value="loginModel.Password" />
+                        <label class="form-label">Password</label>
+                    </div>
+
+                    <div class="text-center text-lg-start mt-4 pt-2">
+                        <button type="submit" class="btn btn-primary btn-lg"
+                                style="padding-left: 2.5rem; padding-right: 2.5rem;">
+                            Login
+                        </button>
+                    </div>
+
+                    <!-- Display validation errors -->
+                    @if (errorMessage != null)
+                    {
+                        <div class="alert alert-danger mt-3" role="alert">
+                            @errorMessage
+                        </div>
+                    }
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    // Model to store the login form data
+    private LoginModel loginModel = new LoginModel();
+
+    // Error message to display if validation fails
+    private string? errorMessage = null;
+
+    // Class to store the form inputs (Email and Password)
+    public class LoginModel
+    {
+        public string? Email { get; set; }
+        public string? Password { get; set; }
+    }
+
+    // Handle the form submission
+    private void HandleLogin()
+    {
+        // Validate if both email and password are filled
+        if (string.IsNullOrWhiteSpace(loginModel.Email) || string.IsNullOrWhiteSpace(loginModel.Password))
+        {
+            errorMessage = "Both email and password are required.";
+            return;
+        }
+
+        // Simulate authentication (replace with your actual authentication logic)
+        if (loginModel.Email != "" && loginModel.Password != "")
+        {
+            errorMessage = null; // Clear error
+            Console.WriteLine("Login successful");
+
+            // Redirect to the home page ("/" in Blazor)
+            Navigation.NavigateTo("/todo");
+        }
+        else
+        {
+            errorMessage = "Invalid email or password.";
+        }
+    }
+}
